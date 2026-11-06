@@ -563,3 +563,5 @@ html:is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(
 /* menu hover panel: division names Playfair Display, descriptor stays Poppins */
 html:is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_) body #menu aside .sp ul li a{font-family:'Playfair Display','Songti SC','Noto Serif SC','Noto Serif CJK SC','Source Han Serif SC','SimSun',Georgia,serif!important;font-weight:700!important;font-style:normal!important}
 html:is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_):is(html,#_) body #menu aside .sp ul li a small{font-family:'Poppins','PingFang SC','Microsoft YaHei','Noto Sans SC','Noto Sans CJK SC','Source Han Sans SC','Hiragino Sans GB',sans-serif!important;font-weight:600!important;font-style:normal!important}
+/* Divisions: simple cards (name, tagline, description, button) - hide the 'What's inside' list and note */
+html:root:root body #pg-divisions #divisions-s1 .card details{display:none!important}
