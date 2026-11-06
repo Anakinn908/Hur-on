@@ -1,0 +1,33 @@
+.pwrap{display:none}
+@media(min-width:801px){.pwrap{display:block}#partnerships .pfall{display:none}}
+#pnet{position:relative;height:clamp(440px,42vw,580px);margin-top:clamp(16px,3vw,40px)}
+#pnet svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+#pnet .ln{stroke:rgba(251,247,242,.18);stroke-width:1;transition:stroke .4s,stroke-width .4s}
+#pnet .ln.on{stroke:var(--c);stroke-width:2}
+#pnet .pd{fill:#d9bd7a}
+#pnet .pc{position:absolute;left:50%;top:50%;width:clamp(120px,13vw,190px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);display:grid;place-content:center;text-align:center;border:1px solid rgba(217,189,122,.55);background:radial-gradient(circle,rgba(217,189,122,.2),rgba(217,189,122,0) 72%);font:500 clamp(22px,2.4vw,34px)/1 'Playfair Display','Times New Roman',serif;letter-spacing:.12em;color:#FBF7F2;animation:pcp 3.2s ease-out infinite}
+@keyframes pcp{0%{box-shadow:0 0 0 0 rgba(217,189,122,.35)}100%{box-shadow:0 0 0 46px rgba(217,189,122,0)}}
+#pnet .pc small{display:block;margin-top:8px;font:400 10px/1.4 'Poppins',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#d9bd7a}
+#pnet .pn{position:absolute;left:0;top:0;display:flex;align-items:center;gap:12px;padding:14px 22px;border-radius:99px;border:1px solid rgba(251,247,242,.3);background:rgba(251,247,242,.06);backdrop-filter:blur(6px);color:#FBF7F2;font:500 clamp(15px,1.45vw,20px)/1.2 'Poppins',sans-serif;letter-spacing:.02em;text-transform:none;white-space:nowrap;cursor:pointer;opacity:0;will-change:transform;transition:background .4s,color .4s,border-color .4s,box-shadow .4s}
+#pnet .pn::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c);flex:none;transition:background .4s}
+#pnet .pn:hover,#pnet .pn:focus-visible{border-color:var(--c)}
+#pnet .pn:focus-visible{outline:2px solid var(--c);outline-offset:3px}
+#pnet .pn.on{background:var(--c);color:#0B3D2E;border-color:var(--c);box-shadow:0 0 50px -6px var(--c)}
+#pnet .pn.on::before{background:#0B3D2E}
+#pnet.has .pn:not(.on){opacity:.4!important}
+#pcap{min-height:110px;margin-top:8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 40px;text-align:center}
+#pcap .pwl{width:100%;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#d9bd7a}
+#pcap .hn{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:rgba(251,247,242,.65)}
+#pcap a{display:block;text-decoration:none;color:var(--c);font:500 clamp(34px,4.4vw,64px)/1 'Playfair Display','Times New Roman',serif;letter-spacing:.05em;animation:fcin .7s both}
+#pcap a span{display:block;margin-top:8px;font:400 12px/1.3 'Poppins',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#FBF7F2}
+#pcap a:hover{text-decoration:underline;text-underline-offset:8px}
+
+#pnet .pc small{font-size:9px;letter-spacing:.14em;white-space:nowrap}
+
+#pnet .pn{padding:8px 24px 8px 8px;gap:14px}
+#pnet .pn::before{display:none}
+#pnet .av{width:clamp(46px,4.4vw,64px);aspect-ratio:1;border-radius:50%;background-size:cover;flex:none;border:2px solid var(--c);transition:width .55s cubic-bezier(.2,.7,.2,1),border-color .4s}
+#pnet .pn.on .av{width:clamp(72px,7.4vw,108px);border-color:#0B3D2E}
+#pnet .pbg{position:absolute;inset:-4% 0;-webkit-mask-image:radial-gradient(ellipse 62% 66% at 50% 50%,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse 62% 66% at 50% 50%,#000 25%,transparent 78%);pointer-events:none}
+#pnet .pbg i{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;filter:blur(3px) saturate(.9);transform:scale(1.08);transition:opacity .9s,transform 6s ease-out}
+#pnet .pbg i.on{opacity:.34;transform:scale(1)}
