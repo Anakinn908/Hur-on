@@ -18,19 +18,19 @@ menu.addEventListener('click',e=>{if(e.target.closest('a'))setMenu(false)});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){setMenu(false);burger.focus()}});
 addEventListener('load',()=>{const h=decodeURIComponent(location.hash.slice(1)),t=h&&document.getElementById(h);if(t)t.scrollIntoView()});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const h=a.getAttribute('href'),t=h.length>1&&document.querySelector(h);if(t){e.preventDefault();t.scrollIntoView()}});
-/* ENQUIRY FORM: emailed by Web3Forms (W3F_KEY).
-   While W3F_KEY is empty the forms run in preview mode (nothing is sent). The hidden 'website' field is a spam honeypot. */
-const W3F_KEY='3a4d909d-fc81-4066-b30b-73759418350c',FORM_ENDPOINT='https://api.web3forms.com/submit';
+/* ENQUIRY FORM: posted to a Google Apps Script web app (see apps-script.gs), which saves each enquiry to a Google Sheet and emails it.
+   Sent as text/plain with no-cors so the browser makes no CORS preflight (Apps Script cannot answer one). The hidden 'website' field is a spam honeypot. */
+const FORM_ENDPOINT='https://script.google.com/macros/s/AKfycbxvq_iI-pFBFO5q_h_nEXg_nHby6DvJzPjczsSdOZpojGzfkccr2cufFFDPShcNRb4c/exec';
 document.addEventListener('submit',e=>{const f=e.target.closest('#enq,#prop');if(!f)return;e.preventDefault();
 const m=f.querySelector('[role=status]'),btn=f.querySelector('[type=submit]'),d=Object.fromEntries(new FormData(f));
 if(d.website)return;delete d.website;
-if(!W3F_KEY){if(window.formInk)formInk(f,false);else if(m)m.textContent='Preview only: enquiry delivery is not connected yet.';return}
+if(!FORM_ENDPOINT){if(window.formInk)formInk(f,false);else if(m)m.textContent='Preview only: enquiry delivery is not connected yet.';return}
 if(btn)btn.disabled=true;if(m)m.textContent='Sending…';
-fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign({access_key:W3F_KEY,subject:f.id==='prop'?'HUR-ON proposal request':'HUR-ON website enquiry',from_name:'HUR-ON Website'},d))})
-.then(r=>r.json().catch(()=>({success:false})))
-.then(j=>{if(!j.success)throw j.message||0;if(m)m.textContent='';window.formInk?formInk(f,true):(m&&(m.textContent='Thank you for contacting HUR-ON. Your enquiry has been received.'));f.reset()})
-.catch(er=>{if(m)m.textContent='Sorry, we could not send your enquiry. Please try again or WhatsApp us.'+(typeof er==='string'&&er?' ('+er+')':'')})
-.finally(()=>{if(btn)btn.disabled=false})});
+const payload=Object.assign({form:f.id==='prop'?'proposal':'enquiry',page:location.href,sent:new Date().toISOString()},d);
+fetch(FORM_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)})
+.then(()=>{if(m)m.textContent='';window.formInk?formInk(f,true):(m&&(m.textContent='Thank you for contacting HUR-ON. Your enquiry has been received.'));f.reset()})
+.catch(er=>{console.error('Enquiry send failed',er);if(m)m.textContent='Sorry, we could not send your enquiry. Please try again or WhatsApp us.'})
+.finally(()=>{if(btn)btn.disabled=false});});
 const hov=matchMedia('(hover:hover)').matches;
 document.querySelectorAll('h1,h2').forEach(h=>{if(h.querySelector('*'))return;let i=0;h.innerHTML=h.textContent.trim().split(/\s+/).map(w=>'<span class="wd"><span style="--i:'+(i++)+'">'+w.replace(/&/g,'&amp;')+'</span></span>').join(' ')});
 let sh=0;const rsh=()=>{sh=document.documentElement.scrollHeight-innerHeight};if(window.ResizeObserver)new ResizeObserver(rsh).observe(document.body);addEventListener('resize',rsh);addEventListener('load',rsh);rsh();
@@ -47,5 +47,6 @@ const cio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)retur
 document.querySelectorAll('.stats b').forEach(b=>{if(/^\d+$/.test(b.textContent))cio.observe(b)});
 const FD={harmonia:['PULSE','Corporate Training &amp; Consultancy','Better People. Stronger Teams.','Strengthen leadership, culture, teamwork and professional capability.','#116f8a','#1b8aa6'],unveil:['SPARK','Children &amp; Youth Development','Reveal What Is Possible.','Reveal confidence, creativity, character and future-ready skills.','#d9560a','#f47a1f'],rise:['BLOOM','Lifelong Learning &amp; Development','Every Season Holds Possibility.','Find fresh possibilities through every stage and transition of life.','#3f7a1c','#5f9b2e'],orbit:['VERVE','Events, Camps &amp; Experiences','Experiences That Bring People Together.','Bring people together through carefully designed conferences, retreats, competitions, camps and celebrations.','#5c2fa5','#7b3fc9']};
 document.querySelectorAll('.fz button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.fz button').forEach(x=>x.setAttribute('aria-pressed',x===b));const d=FD[b.dataset.d];$('#fres').innerHTML='<div class="fr"><div class="fa" style="--c1:'+d[4]+';--c2:'+d[5]+'"><span>'+d[0][0]+'</span></div><div><h3>'+d[0]+'</h3><div class="who">'+d[1]+'</div><div class="tg">'+d[2]+'</div><p>'+d[3]+'</p><div class="ctas" style="margin-top:22px"><a class="btn" href="'+b.dataset.d+'.html">Explore '+(d[0]==='VERVE'?'Events':d[0])+' →</a><a class="btn" href="proposal.html">Request a Proposal</a></div></div></div>'}));
+ 
  
  
