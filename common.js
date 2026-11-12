@@ -18,16 +18,13 @@ menu.addEventListener('click',e=>{if(e.target.closest('a'))setMenu(false)});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){setMenu(false);burger.focus()}});
 addEventListener('load',()=>{const h=decodeURIComponent(location.hash.slice(1)),t=h&&document.getElementById(h);if(t)t.scrollIntoView()});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const h=a.getAttribute('href'),t=h.length>1&&document.querySelector(h);if(t){e.preventDefault();t.scrollIntoView()}});
-/* ENQUIRY FORM: emailed by Web3Forms (W3F_KEY) and optionally logged to a Google Sheet via Apps Script (APPS_URL).
-   While both are empty the forms run in preview mode (nothing is sent). The hidden 'website' field is a spam honeypot. */
-const W3F_KEY='3a4d909d-fc81-4066-b30b-73759418350c',FORM_ENDPOINT='https://api.web3forms.com/submit',APPS_URL='https://script.google.com/macros/s/AKfycbxvq_iI-pFBFO5q_h_nEXg_nHby6DvJzPjczsSdOZpojGzfkccr2cufFFDPShcNRb4c/exec';
+/* ENQUIRY FORM: emailed by Web3Forms (W3F_KEY).
+   While W3F_KEY is empty the forms run in preview mode (nothing is sent). The hidden 'website' field is a spam honeypot. */
+const W3F_KEY='3a4d909d-fc81-4066-b30b-73759418350c',FORM_ENDPOINT='https://api.web3forms.com/submit';
 document.addEventListener('submit',e=>{const f=e.target.closest('#enq,#prop');if(!f)return;e.preventDefault();
 const m=f.querySelector('[role=status]'),btn=f.querySelector('[type=submit]'),d=Object.fromEntries(new FormData(f));
 if(d.website)return;delete d.website;
-if(!W3F_KEY&&!APPS_URL){if(window.formInk)formInk(f,false);else if(m)m.textContent='Preview only: enquiry delivery is not connected yet.';return}
-/* Google Sheet log (best effort, never blocks or fails the form). APPS_URL = your Apps Script web app URL ending in /exec */
-if(APPS_URL){try{fetch(APPS_URL,{method:'POST',mode:'no-cors',keepalive:true,body:JSON.stringify(Object.assign({form:f.id==='prop'?'proposal':'enquiry'},d))}).catch(()=>{})}catch(x){}}
-if(!W3F_KEY){window.formInk?formInk(f,true):(m&&(m.textContent='Thank you for contacting HUR-ON. Your enquiry has been received.'));f.reset();return}
+if(!W3F_KEY){if(window.formInk)formInk(f,false);else if(m)m.textContent='Preview only: enquiry delivery is not connected yet.';return}
 if(btn)btn.disabled=true;if(m)m.textContent='Sending…';
 fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign({access_key:W3F_KEY,subject:f.id==='prop'?'HUR-ON proposal request':'HUR-ON website enquiry',from_name:'HUR-ON Website'},d))})
 .then(r=>r.json().catch(()=>({success:false})))
