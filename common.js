@@ -18,13 +18,16 @@ menu.addEventListener('click',e=>{if(e.target.closest('a'))setMenu(false)});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){setMenu(false);burger.focus()}});
 addEventListener('load',()=>{const h=decodeURIComponent(location.hash.slice(1)),t=h&&document.getElementById(h);if(t)t.scrollIntoView()});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const h=a.getAttribute('href'),t=h.length>1&&document.querySelector(h);if(t){e.preventDefault();t.scrollIntoView()}});
-/* ENQUIRY FORM: delivered by Web3Forms. Paste your Access Key into W3F_KEY (get it free at https://web3forms.com).
-   While W3F_KEY is empty the forms run in preview mode (nothing is sent). The hidden 'website' field is a spam honeypot. */
-const W3F_KEY='3a4d909d-fc81-4066-b30b-73759418350c',FORM_ENDPOINT='https://api.web3forms.com/submit';
+/* ENQUIRY FORM: emailed by Web3Forms (W3F_KEY) and optionally logged to a Google Sheet via Apps Script (APPS_URL).
+   While both are empty the forms run in preview mode (nothing is sent). The hidden 'website' field is a spam honeypot. */
+const W3F_KEY='3a4d909d-fc81-4066-b30b-73759418350c',FORM_ENDPOINT='https://api.web3forms.com/submit',APPS_URL='https://script.google.com/macros/s/AKfycbxvq_iI-pFBFO5q_h_nEXg_nHby6DvJzPjczsSdOZpojGzfkccr2cufFFDPShcNRb4c/exec';
 document.addEventListener('submit',e=>{const f=e.target.closest('#enq,#prop');if(!f)return;e.preventDefault();
 const m=f.querySelector('[role=status]'),btn=f.querySelector('[type=submit]'),d=Object.fromEntries(new FormData(f));
 if(d.website)return;delete d.website;
-if(!W3F_KEY){if(window.formInk)formInk(f,false);else if(m)m.textContent='Preview only: enquiry delivery is not connected yet.';return}
+if(!W3F_KEY&&!APPS_URL){if(window.formInk)formInk(f,false);else if(m)m.textContent='Preview only: enquiry delivery is not connected yet.';return}
+/* Google Sheet log (best effort, never blocks or fails the form). APPS_URL = your Apps Script web app URL ending in /exec */
+if(APPS_URL){try{fetch(APPS_URL,{method:'POST',mode:'no-cors',keepalive:true,body:JSON.stringify(Object.assign({form:f.id==='prop'?'proposal':'enquiry'},d))}).catch(()=>{})}catch(x){}}
+if(!W3F_KEY){window.formInk?formInk(f,true):(m&&(m.textContent='Thank you for contacting HUR-ON. Your enquiry has been received.'));f.reset();return}
 if(btn)btn.disabled=true;if(m)m.textContent='Sending…';
 fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign({access_key:W3F_KEY,subject:f.id==='prop'?'HUR-ON proposal request':'HUR-ON website enquiry',from_name:'HUR-ON Website'},d))})
 .then(r=>r.json().catch(()=>({success:false})))
@@ -47,4 +50,5 @@ const cio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)retur
 document.querySelectorAll('.stats b').forEach(b=>{if(/^\d+$/.test(b.textContent))cio.observe(b)});
 const FD={harmonia:['PULSE','Corporate Training &amp; Consultancy','Better People. Stronger Teams.','Strengthen leadership, culture, teamwork and professional capability.','#116f8a','#1b8aa6'],unveil:['SPARK','Children &amp; Youth Development','Reveal What Is Possible.','Reveal confidence, creativity, character and future-ready skills.','#d9560a','#f47a1f'],rise:['BLOOM','Lifelong Learning &amp; Development','Every Season Holds Possibility.','Find fresh possibilities through every stage and transition of life.','#3f7a1c','#5f9b2e'],orbit:['VERVE','Events, Camps &amp; Experiences','Experiences That Bring People Together.','Bring people together through carefully designed conferences, retreats, competitions, camps and celebrations.','#5c2fa5','#7b3fc9']};
 document.querySelectorAll('.fz button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.fz button').forEach(x=>x.setAttribute('aria-pressed',x===b));const d=FD[b.dataset.d];$('#fres').innerHTML='<div class="fr"><div class="fa" style="--c1:'+d[4]+';--c2:'+d[5]+'"><span>'+d[0][0]+'</span></div><div><h3>'+d[0]+'</h3><div class="who">'+d[1]+'</div><div class="tg">'+d[2]+'</div><p>'+d[3]+'</p><div class="ctas" style="margin-top:22px"><a class="btn" href="'+b.dataset.d+'.html">Explore '+(d[0]==='VERVE'?'Events':d[0])+' →</a><a class="btn" href="proposal.html">Request a Proposal</a></div></div></div>'}));
+ 
  
